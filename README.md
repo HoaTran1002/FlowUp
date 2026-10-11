@@ -149,6 +149,8 @@ Approved documents are the source of truth, in this priority order:
 | 9 | [`IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) | milestones, `BE-*`/`FE-*` tasks, open ADRs |
 | 10 | [`TEST_PLAN.md`](docs/TEST_PLAN.md) | verification requirements (`QA-*`) |
 
+Derived, ranking below the ten above: [`docs/phase-1/`](docs/phase-1/) (per-task specifications) and [`docs/STANDARDS_ALIGNMENT.md`](docs/STANDARDS_ALIGNMENT.md) (how v0.1 compares with Standard Webhooks, CloudEvents, RFC 9457, OWASP ASVS and related standards — informative; it changes no contract).
+
 If two documents conflict, the conflict is reported and resolved — never chosen silently.
 
 ---
@@ -177,10 +179,13 @@ This repository is agent-ready and keeps **one** canonical rule set:
 
 | File | Purpose |
 |---|---|
-| [`AGENTS.md`](AGENTS.md) | repository rules — authoritative |
-| [`AGENT_ADAPTER.md`](AGENT_ADAPTER.md) | tool-agnostic adapter: rule loading, document resolution, the universal task loop, required report format, non-negotiable invariants |
-| [`apps/api/AGENTS.md`](apps/api/AGENTS.md) | backend rules |
-| [`apps/web/AGENTS.md`](apps/web/AGENTS.md) | frontend rules |
+| [`AGENTS.md`](AGENTS.md) | repository engineering standard — authoritative. §4 holds the invariants `INV-01`..`INV-12` |
+| [`AGENT_ADAPTER.md`](AGENT_ADAPTER.md) | tool-agnostic process contract: rule loading, capability declaration, document resolution, task loop, conflict reporting, report template |
+| [`apps/api/AGENTS.md`](apps/api/AGENTS.md) | backend scoped standard |
+| [`apps/web/AGENTS.md`](apps/web/AGENTS.md) | frontend scoped standard |
+| [`.claude/skills/flowup-task/`](.claude/skills/flowup-task/SKILL.md) | invokable skill: `/flowup-task BE-07` loads the rule stack, resolves the specification, walks the loop, enforces the report |
+
+The invariants live in exactly one place — `AGENTS.md` §4 — and everything else cites them by ID, so they cannot drift.
 
 Tool-specific files (`CLAUDE.md`, `.cursor/rules/flowup.mdc`, `.github/copilot-instructions.md`, `GEMINI.md`, `.windsurfrules`) are pointers, not copies. Any agent not listed there reads `AGENTS.md` and `AGENT_ADAPTER.md` directly.
 

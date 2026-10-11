@@ -70,20 +70,26 @@ Each spec has the same sections: **Task · Dependencies · Blocked by · Require
 
 ## 4. Rules that apply to every task
 
-These are restated here because every specification assumes them. Full rationale: root `AGENTS.md`, `apps/api/AGENTS.md`, `apps/web/AGENTS.md`, `AGENT_ADAPTER.md` §8.
+Every specification in this folder assumes the repository invariants **INV-01**..**INV-12** in [`AGENTS.md`](../../AGENTS.md) §4. They are maintained there as the single source and are cited by ID in each specification's acceptance criteria. They are deliberately not reproduced here, so that they cannot drift.
 
-1. Resolve `organization_id` from the authenticated principal, never from request input. Scope every query and mutation; a non-owned ID returns `404`, never a cross-tenant existence hint.
-2. PostgreSQL is authoritative. Redis/BullMQ is execution coordination only.
-3. No external I/O — HTTP or Redis — inside a database transaction.
-4. The database owns the retry schedule; each BullMQ job performs one attempt (`attempts: 1`).
-5. Business idempotency comes from database uniqueness constraints, never from in-process state or BullMQ job retention.
-6. Secrets are shown exactly once, at creation or rotation. Never in logs, queue jobs, browser storage, query cache, analytics, URLs, fixtures or test snapshots.
-7. History is append-only: accepted events, delivery attempts and audit entries are never rewritten or deleted to simplify an implementation.
-8. Every schema change ships with a Prisma migration in the centralized location.
-9. At-least-once only. Never claim or imply exactly-once delivery in code, UI, logs or docs.
-10. Never weaken tenant isolation, SSRF controls, signing or secret handling to make a test pass.
-11. No feature outside the approved MVP. No new dependency without justification. No unrelated refactor.
-12. Never report a verification that was not executed.
+The ones most frequently decisive in this phase:
+
+| ID | Short form | Tasks where it is load-bearing |
+|---|---|---|
+| **INV-01** | tenant scope from the principal; non-owned ID returns `404` | every route task: `BE-02`, `BE-04`..`BE-07`, `BE-11`, `BE-12` |
+| **INV-02** | `202` only after the publish transaction commits | `BE-07` |
+| **INV-03** | PostgreSQL authoritative, Redis coordination only | `BE-08`, `BE-09`, `BE-10` |
+| **INV-04** | the database owns the retry schedule; `attempts: 1` | `BE-08`, `BE-09`, `BE-10` |
+| **INV-05** | no external I/O inside a transaction | `BE-07`, `BE-08`, `BE-09`, `BE-10` |
+| **INV-06** | idempotency from database constraints | `BE-03`, `BE-07`, `BE-12` |
+| **INV-07** | public HTTPS only; validate the connected IP; no redirects | `BE-06`, `BE-09` |
+| **INV-08** | credentials revealed once and never recorded | `BE-05`, `BE-06`, `FE-04`, `FE-05`, `FE-10` |
+| **INV-09** | history is append-only | `BE-03`, `BE-10`, `BE-12`, `BE-13` |
+| **INV-10** | at-least-once, never exactly-once | `BE-09`, `BE-10`, `FE-07`, `FE-08`, `FE-10` |
+| **INV-11** | schema change ships with a reviewed migration | `BE-03`, and any later schema touch |
+| **INV-12** | never report an unexecuted verification | every task |
+
+Process rules — the task loop, conflict reporting and the report template — are in [`AGENT_ADAPTER.md`](../../AGENT_ADAPTER.md) §4, §6 and §7.
 
 ## 5. Open ADRs — what is blocked
 
