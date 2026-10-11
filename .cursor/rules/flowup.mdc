@@ -1,0 +1,15 @@
+---
+description: FlowUp repository rules — pointer to the canonical rule set
+alwaysApply: true
+---
+
+FlowUp keeps one canonical rule set; this file is a pointer only.
+
+Read before writing code, in order:
+
+1. `AGENTS.md` — repository rules (authoritative).
+2. `AGENT_ADAPTER.md` — rule loading, document resolution order, the universal task loop, and the required report format.
+3. `apps/api/AGENTS.md` for backend work, `apps/web/AGENTS.md` for frontend work.
+4. The task row in `docs/IMPLEMENTATION_PLAN.md`, or the matching document in `docs/phase-1/` for workspace setup.
+
+Approved documents in `docs/` are the source of truth. Report document conflicts instead of resolving them silently. Non-negotiable invariants are listed in `AGENT_ADAPTER.md` §8.
