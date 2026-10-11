@@ -6,7 +6,7 @@
 
 FlowUp receives business events from authenticated producers, persists them durably, routes them to customer-configured HTTPS endpoints, delivers them asynchronously, retries transient failures within a bounded policy, and exposes full delivery observability with manual replay.
 
-**Version:** 0.1 · **Status:** design complete, implementation starting at [phase 1 setup](docs/phase-1/)
+**Version:** 0.1 · **Status:** design complete; implementation specified task by task in [build phase 1](docs/phase-1/)
 
 ---
 
@@ -110,7 +110,7 @@ Delivery states: `PENDING`, `IN_PROGRESS`, `RETRY_WAIT`, `SUCCEEDED`, `FAILED`, 
 | Frontend | React · TypeScript · TanStack Router · TanStack Query · Axios · shadcn/ui · Tailwind CSS |
 | Tooling | Bun workspaces · Docker Compose · environment-based configuration |
 
-Runtime note: Bun is the package manager and workspace tool. Using Bun as the *runtime* for the NestJS processes is gated on the **ADR-06** compatibility matrix in [phase 1](docs/phase-1/README.md#6-adr-06-runtime-gate-must-be-resolved-in-this-phase); the documented fallback is Bun + Node.js LTS with no architectural change.
+Runtime note: Bun is the package manager and workspace tool. Using Bun as the *runtime* for the NestJS processes is gated on the **ADR-06** compatibility matrix in [`BE-01`](docs/phase-1/BE-01.md); the documented fallback is Bun + Node.js LTS with no architectural change.
 
 ---
 
@@ -155,15 +155,19 @@ If two documents conflict, the conflict is reported and resolved — never chose
 
 ## 5. Getting started
 
-Implementation begins with phase 1, which stands up the workspace and nothing more:
+Implementation is specified task by task in build phase 1, which covers the whole v0.1 pilot:
 
-| Document | Task |
+[`docs/phase-1/`](docs/phase-1/) holds one specification file per implementation task, plus an index with the shared conventions, the open-ADR map and the phase exit criteria.
+
+| Document | Covers |
 |---|---|
-| [`docs/phase-1/README.md`](docs/phase-1/README.md) | shared workspace root, environment contract, ADR-06 gate, exit criteria |
-| [`docs/phase-1/BACKEND_SETUP.md`](docs/phase-1/BACKEND_SETUP.md) | `BE-01` — api, dispatcher, worker, Prisma, Compose, logging, CI |
-| [`docs/phase-1/FRONTEND_SETUP.md`](docs/phase-1/FRONTEND_SETUP.md) | `FE-01` — Vite, router, query, Axios client, shadcn shell |
+| [`docs/phase-1/README.md`](docs/phase-1/README.md) | spec index, cross-task rules, environment contract, ADR gates, exit criteria |
+| [`BE-01`](docs/phase-1/BE-01.md) → [`BE-14`](docs/phase-1/BE-14.md) | workspace and infrastructure, auth and RBAC, schema, applications, API keys, endpoints, publish, outbox dispatcher, worker, retry and recovery, read APIs, replay, hardening, published contract |
+| [`FE-01`](docs/phase-1/FE-01.md) → [`FE-10`](docs/phase-1/FE-10.md) | shell and API client, session guard, applications, endpoints and secrets, API keys, events, deliveries, replay, usage and accessibility, browser E2E |
 
-Phase 1 deliberately implements no authentication, no business endpoint and no business table: **ADR-01** (dashboard session/invitation/CSRF contract) must be resolved before `BE-02` or `FE-02` starts.
+Start with `BE-01` and `FE-01`; the index's milestone map gives the dependency order after that.
+
+`BE-01` and `FE-01` deliberately implement no authentication, no business endpoint and no business table: **ADR-01** (dashboard session/invitation/CSRF contract) must be resolved before `BE-02` or `FE-02` starts. Each specification names the ADR that blocks it.
 
 ---
 

@@ -4,6 +4,6 @@ Read before writing code, in order:
 1. AGENTS.md (repository rules, authoritative)
 2. AGENT_ADAPTER.md (rule loading, document resolution, task loop, reporting)
 3. apps/api/AGENTS.md for backend work, apps/web/AGENTS.md for frontend work
-4. The task row in docs/IMPLEMENTATION_PLAN.md, or docs/phase-1/ for workspace setup
+4. The task row in docs/IMPLEMENTATION_PLAN.md, or that task's specification in docs/phase-1/ (BE-XX.md / FE-XX.md)
 
 Approved documents in docs/ are the source of truth. Report document conflicts instead of resolving them silently. Use the final report format in AGENT_ADAPTER.md section 7.

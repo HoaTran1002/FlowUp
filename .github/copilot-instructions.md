@@ -7,7 +7,7 @@ Read before writing code, in order:
 1. `AGENTS.md` — repository rules (authoritative).
 2. `AGENT_ADAPTER.md` — rule loading, document resolution order, the universal task loop, and the required report format.
 3. `apps/api/AGENTS.md` for backend work, `apps/web/AGENTS.md` for frontend work.
-4. The task row in `docs/IMPLEMENTATION_PLAN.md`, or the matching document in `docs/phase-1/` for workspace setup.
+4. The task row in `docs/IMPLEMENTATION_PLAN.md`, or that task's specification in `docs/phase-1/` (`BE-XX.md` / `FE-XX.md`).
 
 Stack: TypeScript, NestJS, Bun, Prisma, PostgreSQL, BullMQ, Redis; React, TanStack Query/Router, Axios, shadcn/ui, Tailwind CSS.
 

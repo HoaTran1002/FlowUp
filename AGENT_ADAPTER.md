@@ -45,7 +45,7 @@ Adapter pointer files that different tools auto-load:
 
 - root `AGENTS.md`
 - the scoped `AGENTS.md` for the target directory
-- the task row in `docs/IMPLEMENTATION_PLAN.md` (`BE-XX` / `FE-XX`), or, for phase-1 setup work, the matching document in `docs/phase-1/`
+- the per-task specification in `docs/phase-1/` (`BE-XX.md` / `FE-XX.md`), which cites the task row in `docs/IMPLEMENTATION_PLAN.md`
 - the sections of the documents in §3 that the task row references
 
 An agent that cannot load these must say so and stop, rather than guess.
@@ -82,9 +82,9 @@ Authoritative documents, highest priority first:
 8. `docs/UI_UX_SPECIFICATION.md` — UX (`UI-*`, `UX-AC-*`)
 9. `docs/IMPLEMENTATION_PLAN.md` — tasks, dependencies, milestones
 10. `docs/TEST_PLAN.md` — verification requirements (`QA-*`)
-11. `docs/phase-1/*` — phase-1 setup procedures (derived; see §5)
+11. `docs/phase-1/*` — per-task build specifications (derived; see §5)
 
-`docs/phase-1/` is **derived guidance**: it tells you *how* to stand up the workspace. If it ever contradicts documents 1–10, documents 1–10 win and the phase-1 document must be corrected.
+`docs/phase-1/` is **derived guidance**: one specification file per `BE-XX`/`FE-XX` task, telling you how to implement it. If it ever contradicts documents 1–10, documents 1–10 win and the specification must be corrected.
 
 ### Requirement ID vocabulary
 
@@ -107,7 +107,7 @@ Every change must trace to at least one ID. If no ID covers the work, the work i
 
 Follow these steps in order for every task, regardless of agent.
 
-**Step 1 — Identify.** State the task ID (`BE-XX`, `FE-XX`, or a `docs/phase-1` step ID), its objective, and its acceptance criteria verbatim from the plan.
+**Step 1 — Identify.** State the task ID (`BE-XX` / `FE-XX`), its objective, and its acceptance criteria verbatim from its specification in `docs/phase-1/` and the plan.
 
 **Step 2 — Check dependencies.** Confirm the upstream tasks in the plan's dependency graph are done. If not, say so and either stop or implement behind an explicit, stated assumption.
 
@@ -138,10 +138,9 @@ Follow these steps in order for every task, regardless of agent.
 | 1 — Product definition | `PRODUCT_OVERVIEW.md`, `URD.md`, `PRD.md` | — |
 | 2 — Design | `SYSTEM_ARCHITECTURE.md`, `DATABASE_DESIGN.md`, `API_SPECIFICATION.md`, `TECHNICAL_DESIGN.md` | — |
 | 3 — Planning | `UI_UX_SPECIFICATION.md`, `IMPLEMENTATION_PLAN.md`, `TEST_PLAN.md` | — |
-| Build step 1 — Workspace setup | `docs/phase-1/README.md`, `docs/phase-1/BACKEND_SETUP.md`, `docs/phase-1/FRONTEND_SETUP.md` | `BE-01`, `FE-01` |
-| Build step 2+ | `IMPLEMENTATION_PLAN.md` §3–§4 | `BE-02`..`BE-14`, `FE-02`..`FE-10` |
+| Build phase 1 — v0.1 pilot | `docs/phase-1/README.md` (conventions, ADR gates, exit criteria) plus one spec per task: `docs/phase-1/BE-01.md`..`BE-14.md`, `FE-01.md`..`FE-10.md` | `BE-01`..`BE-14`, `FE-01`..`FE-10` |
 
-Setup work (`BE-01`, `FE-01`) is the only work permitted before `ADR-01` is resolved, and even then it must not implement an authentication scheme.
+Setup work (`BE-01`, `FE-01`) is the only work permitted before `ADR-01` is resolved, and even then it must not implement an authentication scheme. `docs/phase-1/README.md` §5 lists what each open ADR blocks.
 
 ---
 
@@ -169,7 +168,7 @@ CONFLICT
 ## 7. Required final report (all agents)
 
 ```
-Task: <BE-XX / FE-XX / phase-1 step> — <title>
+Task: <BE-XX / FE-XX> — <title>
 Requirements: <FR-*, NFR-*, UI-*, UX-AC-*, QA-*, AT-*>
 
 Implemented:
