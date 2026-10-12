@@ -20,5 +20,5 @@
     "tests/**/*.ts",
     "prisma.config.ts"
   ],
-  "exclude": ["**/dist/**", "prisma/generated/**"]
+  "exclude": ["**/dist/**", "prisma/generated/**", "apps/web/**"]
 }

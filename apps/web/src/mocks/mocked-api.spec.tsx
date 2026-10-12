@@ -26,7 +26,7 @@ import { handlers } from './handlers';
 const server = setupServer(...handlers);
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  server.listen({ onUnhandledFrame: 'error' });
 });
 afterEach(() => {
   server.resetHandlers();
@@ -97,7 +97,11 @@ describe('mocked API: cursor page', () => {
   });
 
   it('renders an empty page as an empty state, not an error', async () => {
-    server.use(http.get(`${env.apiBaseUrl}${API_PATH_PREFIX}/applications`, () => HttpResponse.json(pageOf([]))));
+    server.use(
+      http.get(`${env.apiBaseUrl}${API_PATH_PREFIX}/applications`, () =>
+        HttpResponse.json(pageOf([])),
+      ),
+    );
     renderList();
 
     expect(await screen.findByTestId('state-empty')).toBeInTheDocument();
@@ -109,9 +113,12 @@ describe('mocked API: error page', () => {
   it('renders the envelope message and the request_id', async () => {
     server.use(
       http.get(`${env.apiBaseUrl}${API_PATH_PREFIX}/applications`, () =>
-        HttpResponse.json(errorEnvelope('forbidden', 'Not allowed for your role', 'req_denied00001'), {
-          status: 403,
-        }),
+        HttpResponse.json(
+          errorEnvelope('forbidden', 'Not allowed for your role', 'req_denied00001'),
+          {
+            status: 403,
+          },
+        ),
       ),
     );
     renderList();
@@ -135,7 +142,9 @@ describe('mocked API: error page', () => {
     );
     renderList();
 
-    expect(await screen.findByText('Customer Alpha · ACTIVE', {}, { timeout: 5000 })).toBeInTheDocument();
+    expect(
+      await screen.findByText('Customer Alpha · ACTIVE', {}, { timeout: 5000 }),
+    ).toBeInTheDocument();
     await waitFor(() => {
       expect(calls).toBe(2);
     });

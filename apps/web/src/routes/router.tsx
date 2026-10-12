@@ -4,6 +4,7 @@ import {
   createRouter,
   Outlet,
   redirect,
+  type RouterHistory,
 } from '@tanstack/react-router';
 
 import { AppShell } from '@/components/layout/app-shell';
@@ -215,7 +216,7 @@ const routeTree = rootRoute.addChildren([
   ]),
 ]);
 
-export function createAppRouter(history?: Parameters<typeof createRouter>[0]['history']) {
+function buildRouter(history?: RouterHistory) {
   return createRouter({
     routeTree,
     ...(history === undefined ? {} : { history }),
@@ -224,7 +225,11 @@ export function createAppRouter(history?: Parameters<typeof createRouter>[0]['hi
   });
 }
 
-export type AppRouter = ReturnType<typeof createAppRouter>;
+export type AppRouter = ReturnType<typeof buildRouter>;
+
+export function createAppRouter(history?: RouterHistory): AppRouter {
+  return buildRouter(history);
+}
 
 declare module '@tanstack/react-router' {
   interface Register {

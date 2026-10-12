@@ -23,17 +23,22 @@ export function mocksRequested(): boolean {
  * by the caller, so that no fixture is reachable from production code.
  */
 export async function enableMocks(): Promise<string | null> {
-  if (!mocksRequested()) {
-    return null;
+  // The condition is written INLINE, directly around the dynamic imports, on
+  // purpose. `import.meta.env.DEV` is replaced by a literal `false` in a
+  // production build, which lets the bundler delete the whole block together
+  // with the handlers, fixtures and worker script. Hiding the check behind a
+  // helper function (as `mocksRequested` does) defeats that elimination.
+  if (import.meta.env.DEV && import.meta.env.MODE === 'mock') {
+    const [{ network }, { handlers }, { MOCK_ORGANIZATION_NAME }] = await Promise.all([
+      import('virtual:msw'),
+      import('./handlers'),
+      import('./fixtures'),
+    ]);
+
+    network.configure({ handlers });
+    await network.enable();
+    return MOCK_ORGANIZATION_NAME;
   }
 
-  const [{ network }, { handlers }, { MOCK_ORGANIZATION_NAME }] = await Promise.all([
-    import('virtual:msw'),
-    import('./handlers'),
-    import('./fixtures'),
-  ]);
-
-  network.configure({ handlers });
-  await network.enable();
-  return MOCK_ORGANIZATION_NAME;
+  return null;
 }

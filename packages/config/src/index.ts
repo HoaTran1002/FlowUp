@@ -7,6 +7,7 @@
  * Prisma client, and the Redis/BullMQ connection factory. Nothing here makes
  * a business decision.
  */
+export * from './core/bootstrap';
 export * from './core/core.module';
 export * from './core/shutdown';
 export * from './core/tokens';

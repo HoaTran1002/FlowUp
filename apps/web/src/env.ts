@@ -15,7 +15,7 @@ export interface WebEnv {
 }
 
 export function readEnv(source: ImportMetaEnv): WebEnv {
-  const raw = source.VITE_API_BASE_URL;
+  const raw: unknown = source.VITE_API_BASE_URL;
 
   if (typeof raw !== 'string' || raw.trim() === '') {
     throw new Error(

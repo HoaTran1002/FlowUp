@@ -15,6 +15,8 @@ export async function renderApp(
   const router = createAppRouter(history);
   await router.load();
 
-  const result = render(<App queryClient={createQueryClient()} router={router} identity={identity} />);
+  const result = render(
+    <App queryClient={createQueryClient()} router={router} identity={identity} />,
+  );
   return Object.assign(result, { router });
 }

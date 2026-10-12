@@ -1,4 +1,4 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Component, type ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { isApiError } from '@/lib/api';
@@ -10,6 +10,11 @@ import { isApiError } from '@/lib/api';
  * become an information-disclosure surface: no stack trace, no raw response,
  * no credential (INV-08, FE-01 §8). The `request_id` is shown when the failure
  * came from an API call, because that is the only thing support can act on.
+ *
+ * Phase 1 has no frontend error-reporting sink, so there is deliberately no
+ * `componentDidCatch`. When a sink is introduced it must redact before
+ * transmitting (INV-08), which is a decision of its own and not something
+ * FE-01 may assume.
  */
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -24,13 +29,6 @@ export class RootErrorBoundary extends Component<ErrorBoundaryProps, ErrorBounda
 
   static getDerivedStateFromError(error: unknown): ErrorBoundaryState {
     return { error };
-  }
-
-  override componentDidCatch(_error: Error, _info: ErrorInfo): void {
-    // Phase 1 has no frontend error-reporting sink. When one is introduced it
-    // must redact before transmitting (INV-08), which is a decision of its own
-    // and not something FE-01 may assume. `console` is deliberately not used:
-    // the repository forbids it in application code (AGENTS.md §6.2).
   }
 
   private readonly reload = (): void => {

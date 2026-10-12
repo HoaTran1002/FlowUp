@@ -9,11 +9,15 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "typecheck": "tsc -p tsconfig.json",
+    "typecheck": "bun run typecheck:backend && bun run typecheck:web",
+    "typecheck:backend": "tsc -p tsconfig.json",
+    "typecheck:web": "bun run --cwd apps/web typecheck",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "bun test --timeout 20000 packages apps/api apps/dispatcher apps/worker",
+    "test": "bun run test:backend && bun run test:web",
+    "test:backend": "bun test --timeout 20000 packages apps/api apps/dispatcher apps/worker",
+    "test:web": "bun run --cwd apps/web test",
     "test:integration": "bun test --timeout 60000 tests/integration",
     "db:generate": "prisma generate --schema prisma/schema.prisma",
     "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
@@ -21,7 +25,8 @@
     "dev:api": "bun run --cwd apps/api dev",
     "dev:dispatcher": "bun run --cwd apps/dispatcher dev",
     "dev:worker": "bun run --cwd apps/worker dev",
-    "dev:web": "echo 'apps/web is delivered by FE-01' && exit 1",
+    "dev:web": "bun run --cwd apps/web dev",
+    "build:web": "bun run --cwd apps/web build",
     "compose:up": "docker compose -f infrastructure/docker-compose.yml --env-file .env up -d --build",
     "compose:down": "docker compose -f infrastructure/docker-compose.yml --env-file .env down"
   },

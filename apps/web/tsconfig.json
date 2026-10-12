@@ -9,7 +9,7 @@
     "types": ["vite/client"],
     "jsx": "react-jsx",
     "useDefineForClassFields": true,
-    "allowImportingTsExtensions": false,
+    "allowImportingTsExtensions": true,
     "paths": {
       "@/*": ["./src/*"],
       "@flowup/contracts": ["../../packages/contracts/src/index.ts"],

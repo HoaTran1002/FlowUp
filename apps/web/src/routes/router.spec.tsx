@@ -57,7 +57,9 @@ describe('route tree', () => {
 
 describe('search parameters', () => {
   it('keeps typed filters from the URL', async () => {
-    const { router } = await renderApp('/app/deliveries?status=FAILED&endpoint_id=end_1&limit=50&cursor=abc');
+    const { router } = await renderApp(
+      '/app/deliveries?status=FAILED&endpoint_id=end_1&limit=50&cursor=abc',
+    );
 
     expect(router.state.location.search).toMatchObject({
       status: 'FAILED',
@@ -103,14 +105,18 @@ describe('application shell', () => {
   it('shows the organization identity from the session and offers no tenant selector', async () => {
     await renderApp('/app/overview');
 
-    expect(await screen.findByTestId('organization-identity')).toHaveTextContent('Test Organization');
+    expect(await screen.findByTestId('organization-identity')).toHaveTextContent(
+      'Test Organization',
+    );
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
   it('states that identity is pending ADR-01 rather than inventing one', async () => {
     await renderApp('/app/overview', { name: null, source: 'pending-adr-01' });
 
-    expect(await screen.findByTestId('organization-identity')).toHaveTextContent('pending (ADR-01)');
+    expect(await screen.findByTestId('organization-identity')).toHaveTextContent(
+      'pending (ADR-01)',
+    );
   });
 
   it('exposes the active route to assistive technology, not by color alone', async () => {

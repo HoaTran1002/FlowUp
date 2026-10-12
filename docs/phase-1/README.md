@@ -172,7 +172,7 @@ Secret-bearing variables are never logged, printed in CI, committed, or echoed i
 
 `DISPATCHER_PROBE_PORT` and `WORKER_PROBE_PORT` were added by `BE-01`: `apps/dispatcher` and `apps/worker` are NestJS application contexts, not HTTP servers, so each needs an explicit port for the minimal health/readiness listener required by `BE-01` §6.2–§6.3.
 
-`RATE_LIMIT_*` and `RETENTION_*` are named as groups above but have no concrete variable names yet. Their names and values are part of `ADR-04` and are defined by `BE-13`; `BE-01` deliberately did not invent them. The Compose-only variables (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `REDIS_PORT`) are local infrastructure credentials read by `infrastructure/docker-compose.yml` and by no application process.
+`RATE_LIMIT_*` and `RETENTION_*` are named as groups above but have no concrete variable names yet. Their names and values are part of `ADR-04` and are defined by `BE-13`; `BE-01` deliberately did not invent them. The Compose-only variables (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `REDIS_PORT`, `WEB_PORT`) are local infrastructure credentials read by `infrastructure/docker-compose.yml` and by no application process.
 
 ## 8. ADR-06 runtime gate
 

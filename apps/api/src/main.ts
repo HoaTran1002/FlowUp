@@ -7,9 +7,9 @@ import {
   FLOWUP_CONFIG,
   Logger,
   NestLoggerBridge,
-  createLogger,
+  createBootstrapLogger,
   installGracefulShutdown,
-  parseEnv,
+  runBootstrap,
   type ApiEnv,
 } from '@flowup/config';
 
@@ -22,22 +22,14 @@ import { ErrorEnvelopeFilter } from './http/error-envelope.filter';
  * It never performs a downstream webhook call: delivery belongs to
  * `apps/worker` (AGENTS.md §6.1).
  */
-async function bootstrap(): Promise<void> {
-  // A bootstrap logger exists before the DI container does, so that a failure
-  // inside NestFactory.create is still reported as a structured record.
-  const parsed = parseEnv('api');
-  const bootstrapLogger = createLogger({
-    role: 'api',
-    level: parsed.ok ? parsed.config.LOG_LEVEL : 'info',
-  }).child({ worker_id: 'api' });
-
+runBootstrap('api', async () => {
   // `bodyParser: false` so the limit below is the only JSON parser configured.
   // Nest's own logger is bridged into the structured logger rather than
   // disabled: `console.*` is banned, but silencing Nest would also silence its
   // fatal diagnostics (BE-01 §2.4, §3.2).
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: false,
-    logger: new NestLoggerBridge(bootstrapLogger),
+    logger: new NestLoggerBridge(createBootstrapLogger('api')),
   });
 
   const config = app.get<ApiEnv>(FLOWUP_CONFIG);
@@ -78,18 +70,4 @@ async function bootstrap(): Promise<void> {
 
   await app.listen(config.API_PORT);
   logger.info('api listening', { port: config.API_PORT });
-}
-
-bootstrap().catch((caught: unknown) => {
-  // The logger may not exist yet, so this path writes the record directly.
-  process.stderr.write(
-    `${JSON.stringify({
-      time: new Date().toISOString(),
-      level: 'error',
-      process: 'api',
-      msg: 'bootstrap failed',
-      error_category: caught instanceof Error ? caught.constructor.name : typeof caught,
-    })}\n`,
-  );
-  process.exitCode = 1;
 });

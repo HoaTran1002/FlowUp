@@ -1,8 +1,8 @@
 # FlowUp — local and production-like infrastructure (BE-01 D8).
 #
 # SYSTEM_ARCHITECTURE.md §3: one codebase, distinct containers for `api`,
-# `dispatcher`, `worker`, `postgres` and `redis`. The `web` container is
-# delivered by FE-01 and is deliberately absent here.
+# `dispatcher`, `worker`, `postgres` and `redis`, plus the static `web` bundle
+# delivered by FE-01.
 #
 # `migrate` is a one-shot job, not a fourth application process: the three
 # application services require applied migrations for their readiness probe to
@@ -152,6 +152,31 @@ services:
       timeout: 5s
       retries: 6
       start_period: 20s
+
+  # FE-01 D10: the dashboard is a static bundle, not a Node process. In
+  # production it sits behind the HTTPS reverse proxy (SYSTEM_ARCHITECTURE.md
+  # §3); the published port here is for local and smoke use only.
+  #
+  # `VITE_API_BASE_URL` is baked in at BUILD time and is not a secret. It is
+  # the address the BROWSER uses to reach the api, so it must be reachable from
+  # the user's machine, not from inside the Compose network.
+  web:
+    build:
+      context: ..
+      dockerfile: infrastructure/web/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:3000}
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - '${WEB_PORT:-8080}:8080'
+    healthcheck:
+      test: ['CMD-SHELL', 'wget --quiet --spider http://127.0.0.1:8080/healthz || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 5s
 
 volumes:
   postgres-data:

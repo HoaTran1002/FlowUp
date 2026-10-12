@@ -57,7 +57,9 @@ describe('ErrorState', () => {
   });
 
   it('does not offer retry for a rejected request', () => {
-    render(<ErrorState error={apiError({ kind: 'unprocessable', status: 422 })} onRetry={vi.fn()} />);
+    render(
+      <ErrorState error={apiError({ kind: 'unprocessable', status: 422 })} onRetry={vi.fn()} />,
+    );
 
     expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument();
   });
@@ -71,7 +73,6 @@ describe('ErrorState', () => {
 });
 
 function Boom({ error }: { error: unknown }): React.JSX.Element {
-  // eslint-disable-next-line @typescript-eslint/only-throw-error -- exercising the boundary with any value
   throw error;
 }
 

@@ -29,8 +29,8 @@ const limit = z.coerce
 const cursor = z.string().min(1).optional().catch(undefined);
 
 /** RFC3339 UTC instants, as the API documents them. */
-const from = z.string().datetime({ offset: true }).optional().catch(undefined);
-const to = z.string().datetime({ offset: true }).optional().catch(undefined);
+const from = z.iso.datetime({ offset: true }).optional().catch(undefined);
+const to = z.iso.datetime({ offset: true }).optional().catch(undefined);
 
 const identifier = z.string().min(1).max(128).optional().catch(undefined);
 

@@ -73,7 +73,7 @@ export function createApiClient(overrides: AxiosRequestConfig = {}): AxiosInstan
   });
 
   instance.interceptors.request.use((config) => {
-    assertNoProducerKey(config.headers as unknown as Record<string, unknown>);
+    assertNoProducerKey(config.headers.toJSON());
     return attachCsrfToken(config);
   });
 

@@ -27,6 +27,8 @@ export function CardHeader({ className, ...props }: ComponentProps<'div'>): Reac
 
 export function CardTitle({ className, ...props }: ComponentProps<'h3'>): React.JSX.Element {
   return (
+    // The heading's content is supplied by the caller through `children`.
+    // eslint-disable-next-line jsx-a11y/heading-has-content
     <h3
       data-slot="card-title"
       className={cn('text-base font-semibold leading-none tracking-tight', className)}

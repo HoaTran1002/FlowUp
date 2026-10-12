@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { readEnv } from './env';
 
 function source(overrides: Partial<ImportMetaEnv>): ImportMetaEnv {
-  return { MODE: 'test', DEV: false, PROD: false, SSR: false, BASE_URL: '/', ...overrides } as ImportMetaEnv;
+  return { MODE: 'test', DEV: false, PROD: false, SSR: false, BASE_URL: '/', ...overrides };
 }
 
 describe('readEnv', () => {
@@ -21,7 +21,9 @@ describe('readEnv', () => {
   });
 
   it('rejects a non-http scheme', () => {
-    expect(() => readEnv(source({ VITE_API_BASE_URL: 'ftp://example.com' }))).toThrow(/http or https/);
+    expect(() => readEnv(source({ VITE_API_BASE_URL: 'ftp://example.com' }))).toThrow(
+      /http or https/,
+    );
   });
 
   it('normalizes away a trailing slash', () => {

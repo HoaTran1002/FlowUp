@@ -118,17 +118,37 @@ Runtime note: Bun is the package manager and workspace tool. Using Bun as the *r
 
 ```text
 apps/
-  api/          NestJS HTTP app (dashboard + producer APIs)
-  dispatcher/   outbox claim and BullMQ enqueue
-  worker/       delivery execution
-  web/          React dashboard
+  web/          FRONTEND  React dashboard (Vite, TanStack Router/Query, shadcn/ui)
+  api/          BACKEND   NestJS HTTP app (dashboard + producer APIs)
+  dispatcher/   BACKEND   outbox claim and BullMQ enqueue
+  worker/       BACKEND   delivery execution
 packages/
-  contracts/    Zod types + OpenAPI-derived client types (the only shared contract source)
-  config/       env schema, logging and telemetry config
-prisma/         single centralized schema and migrations
+  contracts/    SHARED    Zod types + envelopes (the only shared contract source)
+  config/       BACKEND   env schema, logging, Prisma/Redis services
+prisma/         BACKEND   single centralized schema and migrations
 infrastructure/ docker-compose.yml, raw SQL migrations
 docs/           product, design, planning and setup documents
 ```
+
+### Frontend / backend boundary
+
+The two sides meet in exactly one place, `packages/contracts`, and over HTTP. This is enforced by ESLint (`no-restricted-imports` in [`eslint.config.mjs`](eslint.config.mjs)), not just by convention.
+
+| Zone | Paths | May import | Must not import |
+|---|---|---|---|
+| Frontend | `apps/web` | `@flowup/contracts`, React, TanStack, Axios | `@flowup/config`, NestJS, Prisma, BullMQ, Redis, `pg`, Express, any `apps/api\|dispatcher\|worker` code |
+| Backend | `apps/api`, `apps/dispatcher`, `apps/worker`, `packages/config`, `prisma` | `@flowup/contracts`, `@flowup/config`, NestJS, Prisma, BullMQ | React, TanStack, Axios, `apps/web` code |
+| Shared | `packages/contracts` | `zod` only | everything else, from either side |
+
+Run each side on its own:
+
+| | Frontend | Backend |
+|---|---|---|
+| Dev | `bun run dev:web` | `bun run dev:api` · `dev:dispatcher` · `dev:worker` |
+| Test | `bun run test:web` | `bun run test:backend` |
+| Typecheck | `bun run typecheck:web` | `bun run typecheck:backend` |
+
+`bun run typecheck` and `bun run test` run both.
 
 ---
 

@@ -38,7 +38,8 @@ export function PlaceholderPage({
       <CardContent className="text-sm text-muted-foreground">
         <p>
           FlowUp phase 1 builds the application shell, routing and the typed API client. This screen
-          is implemented by <span className="font-medium">{task}</span> and shows no data until then.
+          is implemented by <span className="font-medium">{task}</span> and shows no data until
+          then.
         </p>
       </CardContent>
     </Card>
