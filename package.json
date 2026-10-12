@@ -1,0 +1,49 @@
+{
+  "name": "flowup",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "bun test --timeout 20000 packages apps/api apps/dispatcher apps/worker",
+    "test:integration": "bun test --timeout 60000 tests/integration",
+    "db:generate": "prisma generate --schema prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "db:migrate:deploy": "prisma migrate deploy --schema prisma/schema.prisma",
+    "dev:api": "bun run --cwd apps/api dev",
+    "dev:dispatcher": "bun run --cwd apps/dispatcher dev",
+    "dev:worker": "bun run --cwd apps/worker dev",
+    "dev:web": "echo 'apps/web is delivered by FE-01' && exit 1",
+    "compose:up": "docker compose -f infrastructure/docker-compose.yml --env-file .env up -d --build",
+    "compose:down": "docker compose -f infrastructure/docker-compose.yml --env-file .env down"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/bun": "1.4.3",
+    "@types/pg": "8.23.1",
+    "bullmq": "6.3.13",
+    "eslint": "10.12.0",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "ioredis": "6.0.0",
+    "pg": "8.23.1",
+    "prettier": "3.9.10",
+    "prisma": "7.10.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "zod": "4.6.6"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0"
+  }
+}

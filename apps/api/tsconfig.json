@@ -1,0 +1,9 @@
+{
+  // See packages/config/tsconfig.json for why nothing is emitted.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
+}

@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+dist
+**/dist
+prisma/generated
+.git
+.github
+docs
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+coverage
+.DS_Store

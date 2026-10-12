@@ -1,0 +1,11 @@
+{
+  // The Bun runtime executes TypeScript directly (ADR-06), so nothing is
+  // emitted here; rootDir/outDir are declared because every workspace owns its
+  // own output layout (BE-01 D1) and a future Node.js build would use them.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
+}

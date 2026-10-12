@@ -1,0 +1,20 @@
+{
+  // The browser bundle is produced by Vite, so nothing is emitted here either
+  // (see packages/config/tsconfig.json). This project owns the DOM libraries
+  // and the JSX transform, which is why apps/web is typechecked as its own
+  // project instead of being pulled into the root program (FE-01 §2).
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+    "jsx": "react-jsx",
+    "useDefineForClassFields": true,
+    "allowImportingTsExtensions": false,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@flowup/contracts": ["../../packages/contracts/src/index.ts"],
+      "@flowup/contracts/*": ["../../packages/contracts/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "vitest.config.ts"]
+}

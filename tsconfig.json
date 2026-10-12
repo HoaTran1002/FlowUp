@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@flowup/config": ["./packages/config/src/index.ts"],
+      "@flowup/config/*": ["./packages/config/src/*"],
+      "@flowup/contracts": ["./packages/contracts/src/index.ts"],
+      "@flowup/contracts/*": ["./packages/contracts/src/*"]
+    }
+  },
+  // The backend project. `apps/web` is excluded on purpose: it is FE-01's
+  // deliverable and needs DOM/JSX compiler options this backend-oriented base
+  // config does not set. It carries its own `apps/web/tsconfig.json`, and
+  // FE-01 owns wiring it into the `typecheck` script.
+  "include": [
+    "apps/api/**/*.ts",
+    "apps/dispatcher/**/*.ts",
+    "apps/worker/**/*.ts",
+    "packages/**/*.ts",
+    "tests/**/*.ts",
+    "prisma.config.ts"
+  ],
+  "exclude": ["**/dist/**", "prisma/generated/**"]
+}

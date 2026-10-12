@@ -161,12 +161,18 @@ Validated by a fail-fast schema in `packages/config` (`TECHNICAL_DESIGN.md` §10
 | `SECRET_ENCRYPTION_KEY` | api, worker | master key for endpoint signing secrets (`BE-06`) |
 | `WORKER_CONCURRENCY` | worker | bounded (`BE-09`) |
 | `DISPATCHER_POLL_INTERVAL_MS` | dispatcher | outbox poll cadence (`BE-08`) |
+| `DISPATCHER_PROBE_PORT` | dispatcher | health/readiness listener (`BE-01`) |
+| `WORKER_PROBE_PORT` | worker | health/readiness listener (`BE-01`) |
 | `DELIVERY_TIMEOUT_MS`, `DELIVERY_MAX_ATTEMPTS`, `DELIVERY_BACKOFF_BASE_MS`, `DELIVERY_MAX_AGE_MS`, `DELIVERY_MAX_RESPONSE_BYTES` | worker | ADR-04 values as configuration (`BE-09`, `BE-10`) |
 | `PUBLISH_MAX_BODY_BYTES`, `RATE_LIMIT_*` | api | ADR-04 values as configuration (`BE-07`, `BE-13`) |
 | `RETENTION_*` | api, jobs | ADR-04 retention policy (`BE-13`) |
 | `VITE_API_BASE_URL` | web | build-time only; not a secret |
 
 Secret-bearing variables are never logged, printed in CI, committed, or echoed in an agent report. `.env.example` is committed with placeholders; `.env` never is.
+
+`DISPATCHER_PROBE_PORT` and `WORKER_PROBE_PORT` were added by `BE-01`: `apps/dispatcher` and `apps/worker` are NestJS application contexts, not HTTP servers, so each needs an explicit port for the minimal health/readiness listener required by `BE-01` §6.2–§6.3.
+
+`RATE_LIMIT_*` and `RETENTION_*` are named as groups above but have no concrete variable names yet. Their names and values are part of `ADR-04` and are defined by `BE-13`; `BE-01` deliberately did not invent them. The Compose-only variables (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT`, `REDIS_PORT`) are local infrastructure credentials read by `infrastructure/docker-compose.yml` and by no application process.
 
 ## 8. ADR-06 runtime gate
 
